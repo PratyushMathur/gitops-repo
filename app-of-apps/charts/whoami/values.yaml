@@ -1,9 +1,9 @@
-replicaCount: 1
-
-image:
-  repository: traefik/whoami
-  tag: v1.10.3
-  pullPolicy: IfNotPresent
-
-service:
-  port: 80
+base:
+  nameOverride: whoami
+  replicaCount: 1
+  image:
+    repository: traefik/whoami
+    tag: v1.10.3
+    pullPolicy: IfNotPresent
+  service:
+    port: 80

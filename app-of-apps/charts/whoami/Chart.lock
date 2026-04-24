@@ -1,0 +1,6 @@
+dependencies:
+- name: base-service
+  repository: file://../base-service
+  version: 0.1.0
+digest: sha256:1d41d253f3dd6d1a6553fef260182f371c2357ea494404efe3a42594183b079f
+generated: "2026-04-24T11:59:22.060932+05:30"

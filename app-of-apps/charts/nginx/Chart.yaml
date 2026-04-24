@@ -4,3 +4,8 @@ description: Nginx sample service chart
 type: application
 version: 0.1.0
 appVersion: "1.27.0"
+dependencies:
+  - name: base-service
+    version: 0.1.0
+    repository: file://../base-service
+    alias: base

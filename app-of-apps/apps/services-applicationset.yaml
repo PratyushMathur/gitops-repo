@@ -17,6 +17,8 @@ spec:
               revision: HEAD
               directories:
                 - path: app-of-apps/charts/*
+                - path: app-of-apps/charts/base-service
+                  exclude: true
   template:
     metadata:
       name: '{{.name}}-{{.path.basename}}'

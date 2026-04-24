@@ -1,9 +1,9 @@
-replicaCount: 1
-
-image:
-  repository: gcr.io/google-samples/gb-frontend
-  tag: v5
-  pullPolicy: IfNotPresent
-
-service:
-  port: 80
+base:
+  nameOverride: guestbook
+  replicaCount: 1
+  image:
+    repository: gcr.io/google-samples/gb-frontend
+    tag: v5
+    pullPolicy: IfNotPresent
+  service:
+    port: 80
