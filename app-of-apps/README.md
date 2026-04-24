@@ -47,12 +47,12 @@ Also add a new file `apps/services/<service-name>-applicationset.yaml` that sele
 
 Use this starter template:
 
-`app-of-apps/apps/services/_service-applicationset.template.yaml`
+`app-of-apps/templates/service-applicationset.template.yaml`
 
 Quick workflow:
 
 ```bash
-cp app-of-apps/apps/services/_service-applicationset.template.yaml \
+cp app-of-apps/templates/service-applicationset.template.yaml \
   app-of-apps/apps/services/payments-applicationset.yaml
 # Replace all '<service-name>' with 'payments'
 ```

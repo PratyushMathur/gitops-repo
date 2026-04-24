@@ -12,7 +12,7 @@ IMAGE_TAG="${3:-latest}"
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CHART_DIR="${REPO_ROOT}/app-of-apps/charts/${SERVICE_NAME}"
-APPSET_TEMPLATE="${REPO_ROOT}/app-of-apps/apps/services/_service-applicationset.template.yaml"
+APPSET_TEMPLATE="${REPO_ROOT}/app-of-apps/templates/service-applicationset.template.yaml"
 APPSET_TARGET="${REPO_ROOT}/app-of-apps/apps/services/${SERVICE_NAME}-applicationset.yaml"
 
 if [[ ! -f "${APPSET_TEMPLATE}" ]]; then
