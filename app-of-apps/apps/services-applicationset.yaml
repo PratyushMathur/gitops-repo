@@ -16,7 +16,7 @@ spec:
               repoURL: https://github.com/PratyushMathur/gitops-repo.git
               revision: HEAD
               directories:
-                - path: app-of-apps/manifests/*
+                - path: app-of-apps/charts/*
   template:
     metadata:
       name: '{{.name}}-{{.path.basename}}'
