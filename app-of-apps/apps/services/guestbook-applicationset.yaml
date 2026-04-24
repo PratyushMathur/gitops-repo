@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook-by-cluster
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  gitops.argoproj.io/enabled: "true"
+                  services.guestbook: "true"
+          - git:
+              repoURL: https://github.com/PratyushMathur/gitops-repo.git
+              revision: HEAD
+              directories:
+                - path: app-of-apps/charts/guestbook
+  template:
+    metadata:
+      name: '{{.name}}-{{.path.basename}}'
+      labels:
+        app.kubernetes.io/part-of: sample-root-app
+        app.kubernetes.io/managed-by: applicationset
+        app.kubernetes.io/name: guestbook
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/PratyushMathur/gitops-repo.git
+        targetRevision: HEAD
+        path: '{{.path.path}}'
+      destination:
+        server: '{{.server}}'
+        namespace: '{{.path.basename}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

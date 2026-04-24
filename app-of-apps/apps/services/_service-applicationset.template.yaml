@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: services-by-cluster
+  name: <service-name>-by-cluster
   namespace: argocd
 spec:
   goTemplate: true
@@ -12,19 +12,19 @@ spec:
               selector:
                 matchLabels:
                   gitops.argoproj.io/enabled: "true"
+                  services.<service-name>: "true"
           - git:
               repoURL: https://github.com/PratyushMathur/gitops-repo.git
               revision: HEAD
               directories:
-                - path: app-of-apps/charts/*
-                - path: app-of-apps/charts/base-service
-                  exclude: true
+                - path: app-of-apps/charts/<service-name>
   template:
     metadata:
       name: '{{.name}}-{{.path.basename}}'
       labels:
         app.kubernetes.io/part-of: sample-root-app
         app.kubernetes.io/managed-by: applicationset
+        app.kubernetes.io/name: <service-name>
     spec:
       project: default
       source:
