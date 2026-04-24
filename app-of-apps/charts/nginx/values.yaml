@@ -1,6 +1,7 @@
 base:
   nameOverride: nginx
-  replicaCount: 1
+  deployment:
+    replicaCount: 1
   image:
     repository: nginx
     tag: "1.27"

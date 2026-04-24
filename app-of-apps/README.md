@@ -35,3 +35,14 @@ kubectl -n argocd label secret <cluster-secret-name> gitops.argoproj.io/enabled=
 
 Add a new Helm chart under `app-of-apps/charts/<service-name>` that depends on `base-service`, and define service-specific values in `values.yaml`.
 No new Application CRD is needed.
+
+## Optional shared manifests via flags
+
+`base-service` supports optional manifests controlled by enable flags in service values:
+
+- `base.serviceAccount.enabled`
+- `base.configMap.enabled`
+- `base.ingress.enabled`
+- `base.hpa.enabled`
+- `base.service.enabled` (default true)
+- `base.deployment.enabled` (default true)

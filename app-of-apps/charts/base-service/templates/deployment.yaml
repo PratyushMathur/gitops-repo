@@ -1,3 +1,4 @@
+{{- if .Values.deployment.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,7 +6,7 @@ metadata:
   labels:
     app: {{ default .Chart.Name .Values.nameOverride }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.deployment.replicaCount }}
   selector:
     matchLabels:
       app: {{ default .Chart.Name .Values.nameOverride }}
@@ -14,9 +15,18 @@ spec:
       labels:
         app: {{ default .Chart.Name .Values.nameOverride }}
     spec:
+      {{- if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ default .Chart.Name .Values.nameOverride }}
+      {{- end }}
       containers:
         - name: {{ default .Chart.Name .Values.nameOverride }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.configMap.enabled }}
+          envFrom:
+            - configMapRef:
+                name: {{ default .Chart.Name .Values.nameOverride }}
+          {{- end }}
           ports:
             - containerPort: {{ .Values.service.port }}
+{{- end }}

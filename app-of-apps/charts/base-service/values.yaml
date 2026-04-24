@@ -1,6 +1,8 @@
 nameOverride: ""
 
-replicaCount: 1
+deployment:
+  enabled: true
+  replicaCount: 1
 
 image:
   repository: nginx
@@ -8,4 +10,30 @@ image:
   pullPolicy: IfNotPresent
 
 service:
+  enabled: true
+  type: ClusterIP
   port: 80
+
+serviceAccount:
+  enabled: false
+  annotations: {}
+
+configMap:
+  enabled: false
+  data: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: ""
+      paths:
+        - path: /
+          pathType: Prefix
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
