@@ -1,0 +1,81 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: prod-services
+  namespace: argocd
+spec:
+  syncPolicy:
+    applicationsSync: create-update
+
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://github.com/PratyushMathur/gitops-repo.git
+              revision: app-of-apps
+              directories:
+                - path: app-of-apps/charts/*
+
+          - clusters:
+              selector:
+                matchLabels:
+                  env: prod
+              values:
+                revision: app-of-apps
+                project: default
+                # Pull clusterName label into a usable template variable
+                clusterName: "{{metadata.labels.clusterName}}"  # e.g. prod-us-east
+
+  template:
+    metadata:
+      name: "{{path.basename}}-{{values.clusterName}}"   # service-a-prod-us-east
+      labels:
+        app: "{{path.basename}}"
+        env: prod
+        cluster: "{{values.clusterName}}"
+      annotations:
+        managed-by: applicationset-prod-services
+    spec:
+      project: "{{values.project}}"
+
+      source:
+        repoURL: https://github.com/PratyushMathur/gitops-repo.git
+        targetRevision: "{{values.revision}}"
+        path: "{{path}}"
+        helm:
+          releaseName: "{{path.basename}}"
+          valueFiles:
+            - values.yaml                             # 1. base
+            # - values-prod.yaml                        # 2. prod-wide
+            # - "values-{{values.clusterName}}.yaml"    # 3. cluster-specific ✅
+          parameters:
+            - name: global.clusterName
+              value: "{{values.clusterName}}"
+            - name: global.region
+              value: "{{metadata.labels.region}}"
+
+      destination:
+        server: "{{server}}"
+        namespace: "{{path.basename}}"
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
+          - PrunePropagationPolicy=foreground
+          - ServerSideApply=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 30s
+            factor: 2
+            maxDuration: 5m
+
+      ignoreDifferences:
+        - group: apps
+          kind: Deployment
+          jsonPointers:
+            - /spec/replicas
