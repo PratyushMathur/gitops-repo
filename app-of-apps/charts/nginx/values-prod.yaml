@@ -1,3 +1,7 @@
 base:
   deployment:
     replicaCount: 2
+  image:
+    repository: nginx
+    tag: "1.31.0"
+    pullPolicy: IfNotPresent
